@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Family - Creative Technologies Lab 01</title>
+    <style>
+        :root {
+            --accent-color: gray;
+            --card-bg: white;
+            --text-color: black;
+            --border-color: #D7CCC8;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(206, 239, 240);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(to right, rgb(45, 45, 245), #00c9ff, #92fe9d);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-color);
+        }
+
+        header h1 {
+            color: white;
+            font-size: 80px;
+            font-weight: 700;
+            text-shadow: 1px 6px 8px rgba(14, 2, 1, 0.514);
+            margin: 0; /* Removed default margin for cleaner look */
+        }
+
+        header p {
+            text-align: center;
+            font-style: italic;
+            font-size: 15px;
+            color: black;
+            padding: 20px;
+        }
+
+        nav {
+            background-color: white;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.151);
+            z-index: 1000; /* Ensures nav stays on top of everything */
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li a {
+            display: block;
+            padding: 15px 25px;
+            color: black; /* Fixed: was using undefined var(--white) */
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        /* --- Main Sections --- */
+        section {
+            padding: 40px 30px;
+            max-width: 1000px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--accent-color);
+        }
+
+        h2 {
+            color: #333; /* Fixed: was using undefined var(--primary-color) */
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 2rem;
+            text-shadow: brown 2px 5px 10px; /* Moved inline style to here */
+        }
+
+        h3 {
+            color: #555; /* Fixed: was using undefined var(--secondary-color) */
+            margin-top: 20px;
+        }
+
+        /* --- Family Tree --- */
+        .tree ul {
+            padding-top: 30px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tree li {
+            float: left;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+
+        /* Tree Connectors */
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid var(--border-color);
+            width: 50%;
+            height: 20px;
+        }
+
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .tree li:only-child::after, .tree li:only-child::before {
+            display: none;
+        }
+
+        .tree li:only-child {
+            padding-top: 0;
+        }
+
+        .tree li:first-child::before, .tree li:last-child::after {
+            border: 0 none;
+        }
+
+        .tree li:last-child::before {
+            border-right: 2px solid var(--border-color);
+            border-radius: 0 5px 0 0;
+        }
+
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid var(--border-color);
+            width: 0;
+            height: 20px;
+        }
+
+        .tree-member {
+            border: 2px solid #555;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            display: inline-block;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .tree-member:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* --- Member Cards --- */
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 4px solid var(--accent-color);
+            background-color: #eee;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            margin-left: 10px;
+            color: #333;
+            font-size: 1.4rem;
+        }
+
+        .card-content p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        /* --- Gallery --- */
+        .media-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            max-width: 400px;
+            margin: 0 auto; /* Centers the audio player */
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(to right, rgb(45, 45, 245), #00c9ff, #92fe9d);
+            color: white;
+            font-size: 15px;
+            margin-top: 50px;
+            border-top: 5px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>The Hale Family</h1>
+        <p style="text-align: left;"><i style="color: white;">Proud Moments, Rich History, and Bright Futures...</i></p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#tree">Family Tree</a></li>
+            <li><a href="#members">Members</a></li>
+            <li><a href="#traditions">Festivals & Food</a></li>
+            <li><a href="#media">Gallery & Media</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <h2>Our History & Ancestors</h2>
+        <p>
+            Welcome to our family page. Our roots trace back to <strong>dhamangaoo Mukhed.</strong> 
+            Our ancestors were known for their strong work ethic and community spirit. We belong to the <strong>Lingayat community</strong>.
+        </p>
+        <p>&bull; Lingayats are followers of Lingayatism, a Shaivite (Lord Shiva–devoted) tradition.</p>
+        <p>&bull; The religion was founded in the 12th century in present-day Karnataka.</p>
+        <p>&bull; Followers wear an Ishtalinga (a small Shiva linga) on their body as a symbol of faith.</p>
+        <p>&bull; The movement originally promoted equality, social reform, and rejection of caste discrimination.</p>
+    </section>
+    
+    <section id="tree">
+        <h2>Family Tree</h2>
+        <div class="tree">
+            <ul>
+                <li>
+                    <a href="#" class="tree-member">KashinathRaoo Hale & panchubai Hale<br><small>(Ancestors)</small></a>
+                    <ul>
+                        <li>
+                            <a href="#" class="tree-member">Gangubai</a>
+                            <ul>
+                                <li><a href="#" class="tree-member">Vaibhavi</a></li>
+                                <li><a href="#" class="tree-member">Vaishnavi</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="tree-member">Sangram & Prabhavati</a>
+                            <ul>
+                                <li><a href="#" class="tree-member"><b>Kashinath (Me)</b></a></li>
+                                <li><a href="#" class="tree-member">Sagar</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="members">
+        <h2>Meet the Family</h2>
+        <div class="member-grid">
+            <div class="card">
+                <img src="father.jpeg" alt="Father">
+                <div class="card-content">
+                    <h3>Sangram Hale (Father)</h3>
+                    <p><b>Role:</b> The Pillar of the House</p>
+                    <p><b>Hobbies:</b> Gardening, Reading.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="mother.jpeg" alt="Mother">
+                <div class="card-content">
+                    <h3>Prabhavati Hale (Mother)</h3>
+                    <p><b>Role:</b> The Heart of the Family</p>
+                    <p><b>Hobbies:</b> Cooking, Singing.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="pic.jpeg" alt="Me">
+                <div class="card-content">
+                    <h3>Kashinath Hale</h3>
+                    <p><b>Role:</b> The Future</p>
+                    <p><b>Achievements:</b> Won a district level skating championship</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img src="bro.jpeg" alt="Brother">
+                <div class="card-content">
+                    <h3>Sagar Hale (Younger Brother)</h3>
+                    <p><b>Role:</b> The Younger Brother</p>
+                    <p><b>Hobbies:</b> Chess, Reading</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="traditions">
+        <h2>Festivals, Food & Proud Moments</h2>
+        
+        <h3>Favorite Festivals</h3>
+        <ul>
+            <li><b>Diwali:</b> We celebrate by lighting lamps and making sweets together.</li>
+            <li><b>Ganesh Chaturthi:</b> We decorate the house with flowers and offer prayers to Lord Ganesha.</li>
+        </ul>
+        
+        <h3>Proud Moments & Achievements</h3>
+        <p>Our family is proud of our achievements, especially when I scored <strong>70k rank in JEE Main</strong>.</p>
+        <p>My younger brother got <strong>gold medal in IMO exam</strong>.</p>
+    </section>
+    <section id="media">
+        <h2>Gallery & Media</h2>
+        <div class="media-item">
+            <audio controls>
+                <source src="audio_file.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p><small>(short explanation of the audio content)</small></p>
+        </div>
+    </section>
+
+    <footer>
+        <p>Designed by Kashinath Hale | Class: First Year | Div: CS1 | Batch: C13</p>
+        <p><b>Creative Technologies - Robotics Lab Activity 01</b></p>
+        <p>Academic Year 2025-26 | Sem II</p>
+    </footer>
+
+</body>
+</html>
